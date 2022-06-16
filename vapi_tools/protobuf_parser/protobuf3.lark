@@ -1,0 +1,83 @@
+proto_module: instruction*
+
+?instruction: statement
+            | comment
+            | newline
+            | message
+            | service
+
+newline : NEWLINE
+comment : CPP_COMMENT NEWLINE
+statement: (syntax
+     | package
+     | import
+     | option ) ";"
+
+syntax : "syntax" "=" syntax_name
+?syntax_name : ESCAPED_STRING
+
+package : "package" package_name
+?package_name : IDENTIFIER
+IDENTIFIER: ("_"|LETTER) ("_"|LETTER|DIGIT|".")*
+
+
+import : "import" import_file
+?import_file : ESCAPED_STRING
+
+option : "option" option_name "=" option_value
+?option_name : CNAME
+?option_value : value
+
+message : "message" message_name "{" message_content "}"
+message_name : CNAME
+message_content : (message_property
+                | enum
+                | message
+                | comment
+                | newline)*
+message_property : repeated data_type property_name "=" property_number ";"
+repeated : REPEATED?
+// use named token to get value in tree
+REPEATED : "repeated"
+data_type : IDENTIFIER
+property_name : CNAME
+property_number : INT
+
+enum : "enum" enum_name "{" enum_items "}"
+enum_name : CNAME
+enum_items : (enum_item | comment)*
+enum_item : enum_item_name "=" enum_item_value ";"
+enum_item_name : IDENTIFIER
+enum_item_value : INT // TODO: check type in docs
+
+service : "service" service_name "{" service_content "}"
+service_name : CNAME
+service_content : (service_endpoint
+                    | comment
+                    | newline)*
+service_endpoint : "rpc" endpoint_name "(" argument_stream endpoint_argument_type ")" "returns" "(" return_stream endpoint_return_type ")"  ";"
+endpoint_name : CNAME
+endpoint_argument_type : IDENTIFIER
+endpoint_return_type : IDENTIFIER
+argument_stream : stream
+return_stream : stream
+stream: STREAM?
+STREAM : "stream"
+
+value : string | boolean | number // TODO: enum value?
+string : ESCAPED_STRING
+boolean : "true" -> true | "false" -> false
+number : SIGNED_NUMBER
+
+%import common.ESCAPED_STRING
+%import common.LETTER
+%import common.DIGIT
+%import common._STRING_ESC_INNER
+%import common.NEWLINE
+%import common.LCASE_LETTER
+%import common.WS
+%import common.CPP_COMMENT
+%import common.CNAME
+%import common.SIGNED_NUMBER
+%import common.INT
+%ignore WS
