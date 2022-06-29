@@ -1,14 +1,15 @@
 from dataclasses import dataclass
-from typing import List, Union, Sequence
+from typing import List, Sequence, Union
 
 from lark import ast_utils
 
-from vapi_tools.cst import CstNode
+from modapp_tools.cst import CstNode
 
 
 class _Ast(ast_utils.Ast):
     # This will be skipped by create_transformer(), because it starts with an underscore
     pass
+
 
 class _Statement(_Ast, CstNode):
     # This will be skipped by create_transformer(), because it starts with an underscore
@@ -63,7 +64,7 @@ class Option(_Statement):
 class Message(_Statement):
     name: str
     statements: List[_Statement]
-    
+
     @property
     def children(self) -> Sequence[CstNode]:
         return self.statements

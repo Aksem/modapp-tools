@@ -1,5 +1,5 @@
-from vapi_tools.code_generators.web_service import generate_web_service
-from vapi_tools.protobuf_parser.ast import Newline, ProtoModule, Comment, Syntax, Package, Import, Option, Message, MessageProperty, Enum, EnumItem, Service, ServiceEndpoint
+from modapp_tools.code_generators.web_service import generate_web_service
+from modapp_tools.protobuf_parser.ast import Newline, ProtoModule, Comment, Syntax, Package, Import, Option, Message, MessageProperty, Enum, EnumItem, Service, ServiceEndpoint
 
 
 def test__generate_web_service__generates_code_for_test_proto(tmp_path):

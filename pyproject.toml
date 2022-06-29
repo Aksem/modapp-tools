@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "vapi-tools"
-version = "0.1.0"
+name = "modapp_tools"
+version = "0.1.1"
 description = ""
 authors = ["Vladyslav Hnatiuk <vladyslav5@meta.ua>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "vapi_tools"}]
+packages = [{include = "modapp_tools"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -17,6 +17,42 @@ typer = "^0.4.1"
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1.2"
 nitpick = "^0.32.0"
+black = "^22.3"
+pytest-cov = "^2.12.1"
+pytest-mock = "^3.7.0"
+isort = "^5.9.3"
+mypy = "^0.910"
+flake8 = "^3.9.2"
+flake8-docstrings = "^1.6.0"
+darglint = "^1.8.0"
+flake8-bugbear = "^21.4.3"
+flake8-comprehensions = "^3.6.1"
+bandit = "^1.7.0"
+safety = "^1.10.3"
 
 [tool.nitpick]
-style = "../nitpick-style/nitpick-style.toml"
+style = "https://raw.githubusercontent.com/Aksem/nitpick-style/1.0/nitpick-style.toml"
+
+[tool.black]
+target-version = ["py38", "py39", "py310"]
+--preview = "yes"
+exclude = "(\n    asv_bench/env\n  | \\.egg\n  | \\.git\n  | \\.hg\n  | \\.mypy_cache\n  | \\.nox\n  | \\.tox\n  | \\.venv\n  | _build\n  | buck-out\n  | build\n  | dist\n  | setup.py\n)\n"
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+disallow_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+show_error_codes = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

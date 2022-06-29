@@ -1,16 +1,23 @@
 from __future__ import annotations
-from typing import Set, Optional, List, Dict, Tuple
+
+from typing import Dict, List, Optional, Set
 
 
 class Import:
-    def __init__(self, name: str, default: bool, path: str):
+    def __init__(self, name: str, default: bool, path: str) -> None:
         self.name = name
         self.default = default
         self.path = path
-    
-    def __eq__(self, other: Import) -> bool:
-        return self.name == other.name and self.default == other.default and self.path == other.path
-    
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Import):
+            return NotImplemented
+        return (
+            self.name == other.name
+            and self.default == other.default
+            and self.path == other.path
+        )
+
     def __hash__(self):
         return hash(self.name) + hash(self.default) + hash(self.path)
 
@@ -22,15 +29,15 @@ class CodeElement:
 
 
 class CodeElementList:
-    def __init__(self):
+    def __init__(self) -> None:
         self.elements = []
-    
+
     def append(self, element: CodeElement):
         self.elements.append(element)
-    
+
     @property
     def code(self) -> str:
-        return f'\n'.join([el.code for el in self.elements])
+        return "\n".join([el.code for el in self.elements])
 
     @property
     def imports(self) -> Set[Import]:
@@ -39,7 +46,7 @@ class CodeElementList:
             if element.imports is not None:
                 result |= element.imports
         return result
-    
+
     def __add__(self, other: CodeElementList | None) -> CodeElementList:
         # support also None to simplify generate() usage
         if other is not None:
@@ -54,7 +61,7 @@ class CodeElementList:
             if el_import.path not in imports_by_paths:
                 imports_by_paths[el_import.path] = []
             imports_by_paths[el_import.path].append(el_import)
-        
+
         imports_paths = list(imports_by_paths.keys())
         # sort to get always the same output
         imports_paths.sort()
@@ -69,13 +76,13 @@ class CodeElementList:
                     named_imports.append(path_import.name)
             # sort to get always the same output
             named_imports.sort()
-            imports_code += f"import"
+            imports_code += "import"
             if default_import is not None:
-                imports_code += ' ' + default_import
+                imports_code += " " + default_import
             if default_import is not None and len(named_imports) > 0:
-                imports_code += ','
+                imports_code += ","
             if len(named_imports) > 0:
-                imports_code += ' { ' + ', '.join(named_imports) + ' }'
+                imports_code += " { " + ", ".join(named_imports) + " }"
             imports_code += f" from '{import_path}';\n"
-            
+
         return f"{imports_code}\n{self.code}"

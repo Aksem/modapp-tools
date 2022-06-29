@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SRC_DIR=xide_server/
+SRC_DIR=modapp_tools/
 
 poetry run black $SRC_DIR
 poetry run isort $SRC_DIR

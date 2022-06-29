@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from vapi_tools.protobuf_parser.parser import parse_protobuf, Newline, ProtoModule, Comment, Syntax, Package, Import, Option, Message, MessageProperty, Enum, EnumItem, Service, ServiceEndpoint
+from modapp_tools.protobuf_parser.parser import parse_protobuf, Newline, ProtoModule, Comment, Syntax, Package, Import, Option, Message, MessageProperty, Enum, EnumItem, Service, ServiceEndpoint
 
 def test__parse_protobuf__parses_test_proto_file():
     current_path = Path(__file__).parent
