@@ -45,6 +45,7 @@ message GetAddressBookRequest {
 
 message GetAddressBookListResponse {
   repeated AddressBook items = 1;
+  map<uint32, boolean> active = 2;
 }
 
 message GetPersonRequest {
