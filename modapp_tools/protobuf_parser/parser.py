@@ -43,6 +43,9 @@ class ProtoAstTransformer(Transformer):
     def data_type(self, data_type):
         # return data type directly, 'data_type' tree is not needed
         return data_type[0]
+    
+    def map_type(self, map_type):
+        return f'map<{", ".join(map_type)}>'
 
     def repeated(self, repeated):
         return len(repeated) > 0

@@ -42,7 +42,7 @@ REPEATED : "repeated"
 data_type : map_type | IDENTIFIER
 property_name : CNAME
 property_number : INT
-map_type : "map<" data_type "," data_type ">"
+map_type : "map" "<" data_type "," " "* data_type ">"
 
 enum : "enum" enum_name "{" enum_items "}"
 enum_name : CNAME

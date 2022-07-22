@@ -140,6 +140,7 @@ def test__parse_protobuf__parses_test_proto_file():
                     MessageProperty(
                         repeated=True, name="items", data_type="AddressBook", number=1
                     ),
+                    Newline(content='\n'),
                     MessageProperty(
                         repeated=False, name="active", data_type="map<uint32, boolean>", number=2
                     ),
