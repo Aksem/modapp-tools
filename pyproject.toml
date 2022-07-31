@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "modapp_tools"
-version = "0.1.2"
+version = "0.2.0"
 description = ""
 authors = ["Vladyslav Hnatiuk <vladyslav5@meta.ua>"]
 license = "MIT"
