@@ -103,3 +103,7 @@ class ServiceEndpoint(_Statement):
 class Service(_Statement):
     name: str
     statements: List[_Statement]
+    
+    @property
+    def children(self) -> Sequence[_Ast]:
+        return self.statements

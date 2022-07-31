@@ -5,6 +5,7 @@ proto_module: instruction*
             | newline
             | message
             | service
+            | enum
 
 newline : NEWLINE
 comment : CPP_COMMENT NEWLINE

@@ -23,8 +23,8 @@ from modapp_tools.protobuf_parser.ast import (
     Service,
     ServiceEndpoint,
 )
+from modapp_tools.protobuf_parser.parser import parse_protobuf
 from modapp_tools.visitor import Visitor
-
 from .js_cst import CodeElement, CodeElementList, Import
 
 
@@ -186,14 +186,22 @@ class WebServiceGenerator(Visitor):
             method_args_str = ""
         endpoint_argument_params_str = "{ " + ", ".join(endpoint_argument_params) + " }"
         func_name = f"rpc{endpoint_type}Call"
-        template = f"""{formatted_name}({method_args_str}) {{
-    return {func_name}(
+        if endpoint_type == "UnaryStream":
+            template = f"""    {formatted_name}: {func_name}(
         '/{endpoint_package}{self.current_service.name}/{endpoint.name}',
         {argument_type_full_name},
-        {return_type_full_name},
-        {endpoint_argument_params_str}
-    );
-}},
+        {return_type_full_name}
+    ),
+"""
+        else:
+            template = f"""    {formatted_name}({method_args_str}) {{
+        return {func_name}(
+            '/{endpoint_package}{self.current_service.name}/{endpoint.name}',
+            {argument_type_full_name},
+            {return_type_full_name},
+            {endpoint_argument_params_str}
+        );
+    }},
 """
         imports.add(Import(func_name, default=False, path="./rpc.js"))
         self.code_el_list.append(CodeElement(template, imports=imports))
@@ -216,3 +224,8 @@ def generate_web_service(proto_module: ProtoModule, output: Path) -> None:
 
     with open(output, "w") as output_file:
         output_file.write(visitor.code_el_list.to_js_module_code())
+
+
+def parse_and_generate_web_service(source_file: Path, output_dir: Path) -> None:
+    proto_module = parse_protobuf(source_file)
+    generate_web_service(proto_module, output_dir / f"{source_file.stem}.js")
