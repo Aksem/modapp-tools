@@ -6,12 +6,11 @@ import typer
 from loguru import logger
 
 import modapp_tools.env as env
-from .code_generators.modapp_back import generate_back
-from .code_generators.web_service import parse_and_generate_web_service
-from .protobuf_parser.parser import parse_protobuf
-from .tools.link_all import link_all as _link_all
-from .tools.regenerate_protos import regenerate_all as _regenerate_all
-from .tools.watch import watch as _watch
+from modapp_tools.code_generators.web_service import parse_and_generate_web_service
+from modapp_tools.tools.create_package import create_package as _create_package
+from modapp_tools.tools.link_all import link_all as _link_all
+from modapp_tools.tools.regenerate_protos import regenerate_all as _regenerate_all
+from modapp_tools.tools.watch import watch as _watch
 
 
 app = typer.Typer()
@@ -36,7 +35,9 @@ def init_env() -> None:
 
         env.PROTOS_PATH = env.WORKSPACE_PATH / paths.get("protos_path", "")
         env.SERVER_PATH = env.WORKSPACE_PATH / paths.get("server_path", "")
-        env.SERVER_GENERATED_PROTOS_PATH = env.WORKSPACE_PATH / paths.get("server_generated_protos_path", "")
+        env.SERVER_GENERATED_PROTOS_PATH = env.WORKSPACE_PATH / paths.get(
+            "server_generated_protos_path", ""
+        )
         env.CLIENT_PATH = env.WORKSPACE_PATH / paths.get("client_path", "")
         env.CLIENT_SERVICES_PATH = env.WORKSPACE_PATH / paths.get(
             "client_services_path", ""
@@ -44,22 +45,21 @@ def init_env() -> None:
     else:
         raise Exception("Modapp workspace('modapp_workspace.toml') not found")
 
+
 init_env()
-
-
-def parse_and_generate_modapp_back(source_file: Path, output_dir: Path) -> None:
-    proto_module = parse_protobuf(source_file)
-    generate_back(proto_module, output_dir)
 
 
 @app.command()
 def generate_from_proto(kind: str, source_file: Path, output_dir: Path) -> None:
     if kind == "webservice":
         parse_and_generate_web_service(source_file, output_dir)
-    elif kind == "modapp_back":
-        parse_and_generate_modapp_back(source_file, output_dir)
     else:
         logger.error(f"Unknown kind: '{kind}'")
+
+
+@app.command()
+def create_package(name: str, parent_dir: Path):
+    _create_package(name, parent_dir)
 
 
 @app.command()
