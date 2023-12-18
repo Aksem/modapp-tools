@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "modapp_tools"
-version = "0.2.2"
+version = "0.3.0"
 description = ""
 authors = ["Vladyslav Hnatiuk <vladyslav5@meta.ua>"]
 license = "MIT"
@@ -16,8 +16,8 @@ pytomlpp = "^1.0.11"
 command-runner = "^1.4.0"
 watchfiles = "^0.18.1"
 grpclib = "^0.4.2"
-grpcio-tools = "^1.48.0"
-protobuf = "3.20.1"
+grpcio-tools = "^1.60.0"
+protobuf = "^4.21.6"
 modapp_cst = { git = "https://github.com/Aksem/modapp-cst.git", tag = "v0.1.2" }
 
 [tool.poetry.group.dev.dependencies]
